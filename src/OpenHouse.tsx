@@ -105,7 +105,7 @@ export function OpenHouse({ host }: OpenHouseProps) {
   const probeAgent = useCallback((agent: OpenHouseAgent) => {
     setProbingId(agent.id);
     const done = async () => {
-      if (agent.sourceKind === 'tytus-daemon') {
+      if (agent.sourceKind === 'tytus-daemon' || agent.sourceKind === 'ail-gateway') {
         const podId = agent.id.replace(/^tytus:/, '');
         const result = await probeTytusPod(agent.id, (path) => host.daemon.callPodEndpoint(podId, path));
         const next = { ...agent, status: result.status, latencyMs: result.latencyMs, lastError: result.lastError, capabilities: result.capabilities };
@@ -143,7 +143,8 @@ export function OpenHouse({ host }: OpenHouseProps) {
           <label>View</label>
           <select value={filter} onChange={(e) => setFilter(e.target.value as Filter)}>
             <option value="all">All residents</option>
-            <option value="tytus-daemon">Tytus Lab</option>
+            <option value="tytus-daemon">Tytus Pods</option>
+            <option value="ail-gateway">AIL Gateway</option>
             <option value="openai-compatible">OpenAI</option>
             <option value="custom-health">Health</option>
             <option value="openhouse-probe">OpenHouse</option>
@@ -177,7 +178,7 @@ export function OpenHouse({ host }: OpenHouseProps) {
           <div className="oh-actions">
             <button type="button" onClick={() => probeAgent(selected)} disabled={probingId === selected.id}>{probingId === selected.id ? 'Testing…' : 'Test connection'}</button>
             <button type="button" onClick={() => copyDiagnostic(selected)}>Copy diagnostic</button>
-            {selected.sourceKind !== 'tytus-daemon' && <button type="button" onClick={() => removeSource(selected.sourceId)}>Remove source</button>}
+            {selected.sourceKind !== 'tytus-daemon' && selected.sourceKind !== 'ail-gateway' && <button type="button" onClick={() => removeSource(selected.sourceId)}>Remove source</button>}
           </div>
         </div> : <div className="oh-side-body"><div className="oh-side-card">Add third-party agents or connect Tytus pods to populate the office.</div></div>}
       </aside>

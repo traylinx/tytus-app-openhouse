@@ -2,6 +2,7 @@ import type { HostClient } from '@tytus/host-api';
 
 export type AgentSourceKind =
   | 'tytus-daemon'
+  | 'ail-gateway'
   | 'openai-compatible'
   | 'custom-health'
   | 'openhouse-probe'

@@ -7,7 +7,8 @@ interface Props { agents: OpenHouseAgent[]; filter: Filter; onFilter(filter: Fil
 
 const FILTERS: { id: Filter; label: string; icon: typeof Building2 }[] = [
   { id: 'all', label: 'All residents', icon: Building2 },
-  { id: 'tytus-daemon', label: 'Tytus Lab', icon: Cpu },
+  { id: 'tytus-daemon', label: 'Tytus Pods', icon: Cpu },
+  { id: 'ail-gateway', label: 'AIL Gateway', icon: Cloud },
   { id: 'openai-compatible', label: 'OpenAI', icon: Cloud },
   { id: 'custom-health', label: 'Health', icon: Building2 },
   { id: 'openhouse-probe', label: 'OpenHouse', icon: Building2 },

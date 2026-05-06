@@ -7,7 +7,7 @@ interface Props {
   onSelect(id: string): void;
 }
 
-const ASSET_BASE = 'https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/';
+const ASSET_BASE = 'https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.1/assets/star-office/';
 const asset = (name: string) => `${ASSET_BASE}${name}`;
 
 const OFFICE_SLOTS = [
@@ -56,6 +56,7 @@ export function HouseScene({ agents, selectedId, onSelect }: Props) {
 function spriteFor(agent: OpenHouseAgent, fallback: string): string {
   if (agent.status === 'busy' || agent.mood === 'focused' || agent.mood === 'thinking') return 'star-working.gif';
   if (agent.status === 'error' || agent.status === 'offline' || agent.mood === 'sick') return 'guestagent2.webp';
+  if (agent.sourceKind === 'ail-gateway') return 'guest_anim_1.webp';
   if (agent.sourceKind === 'tytus-daemon') return fallback;
   if (agent.sourceKind === 'mcp-http') return 'guest_anim_3.webp';
   if (agent.sourceKind === 'openai-compatible') return 'guest_anim_1.webp';

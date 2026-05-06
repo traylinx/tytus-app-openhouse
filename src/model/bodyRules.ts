@@ -15,6 +15,7 @@ export function statusToMood(status: AgentStatus): AgentMood {
 export function defaultRoom(kind: AgentSourceKind, baseUrl?: string, status?: AgentStatus): RoomId {
   if (status === 'error' || status === 'offline') return 'incident-infirmary';
   if (kind === 'tytus-daemon') return 'tytus-lab';
+  if (kind === 'ail-gateway') return 'remote-balcony';
   if (kind === 'mcp-http') return 'mcp-library';
   if (baseUrl) {
     try {
@@ -31,6 +32,7 @@ export function defaultRoom(kind: AgentSourceKind, baseUrl?: string, status?: Ag
 export function bodyFor(kind: AgentSourceKind, status: AgentStatus, override?: Partial<AgentBodySpec>): AgentBodySpec {
   const byKind: Record<AgentSourceKind, AgentBodySpec> = {
     'tytus-daemon': { species: 'robot', palette: 'violet', accessory: 'antenna', animation: 'breathe' },
+    'ail-gateway': { species: 'hologram', palette: 'cyan', accessory: 'sparkles', animation: 'scan' },
     'openai-compatible': { species: 'hologram', palette: 'cyan', accessory: 'sparkles', animation: 'scan' },
     'custom-health': { species: 'drone', palette: 'green', accessory: 'shield', animation: 'pulse' },
     'openhouse-probe': { species: 'robot', palette: 'silver', accessory: 'sparkles', animation: 'breathe' },

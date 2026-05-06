@@ -1,6 +1,6 @@
 {
   "name": "tytus-app-openhouse",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "description": "OpenHouse — visual agent house for Tytus pods and third-party AI agents.",
   "license": "MIT",
