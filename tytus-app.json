@@ -2,10 +2,10 @@
   "$schema": "https://tytus.traylinx.com/schema/app/v1.json",
   "id": "openhouse",
   "name": "OpenHouse",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "icon": "Building2",
   "category": "Productivity",
-  "description": "Visual agent house for Tytus pods and third-party AI agents.",
+  "description": "Pixel office for Tytus pods and third-party AI agents, adapted from Star Office UI.",
   "window": {
     "defaultSize": {
       "width": 1320,

@@ -1,6 +1,4 @@
-import { deterministicLayout, isGroupedMode, ROOMS } from '@/model/layout';
-import type { LayoutPosition, OpenHouseAgent, RoomId } from '@/model/types';
-import { AgentBody } from './AgentBody';
+import type { LayoutPosition, OpenHouseAgent } from '@/model/types';
 
 interface Props {
   agents: OpenHouseAgent[];
@@ -9,79 +7,70 @@ interface Props {
   onSelect(id: string): void;
 }
 
-const ROOM_FILL: Record<RoomId, string> = {
-  lobby: '#1f2937',
-  'tytus-lab': '#312e81',
-  'local-workshop': '#064e3b',
-  'remote-balcony': '#164e63',
-  'mcp-library': '#451a03',
-  'incident-infirmary': '#450a0a',
-};
+const ASSET_BASE = 'https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/';
+const asset = (name: string) => `${ASSET_BASE}${name}`;
 
-export function HouseScene({ agents, savedLayout, selectedId, onSelect }: Props) {
-  const layout = deterministicLayout(agents, savedLayout);
-  const pos = new Map(layout.map((p) => [p.agentId, p]));
-  const grouped = isGroupedMode(agents.length);
+const OFFICE_SLOTS = [
+  { x: 23, y: 60, scale: 1.45, sprite: 'guestagent1.webp', labelDx: 0 },
+  { x: 69, y: 28, scale: 1.25, sprite: 'guestagent2.webp', labelDx: -2 },
+  { x: 38, y: 82, scale: 1.35, sprite: 'guest_anim_2.webp', labelDx: 0 },
+  { x: 58, y: 55, scale: 1.2, sprite: 'guest_anim_1.webp', labelDx: 0 },
+  { x: 82, y: 42, scale: 1.15, sprite: 'guest_anim_3.webp', labelDx: 0 },
+  { x: 17, y: 33, scale: 1.1, sprite: 'star-idle.gif', labelDx: 0 },
+];
+
+export function HouseScene({ agents, selectedId, onSelect }: Props) {
+  const visible = agents.slice(0, OFFICE_SLOTS.length);
+  const overflow = Math.max(0, agents.length - OFFICE_SLOTS.length);
+
   return (
-    <div className="oh-scene-wrap">
-      <svg viewBox="0 0 1400 740" role="img" aria-label="OpenHouse agent house" className="oh-scene">
-        <defs>
-          <linearGradient id="houseFloor" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#0f172a" />
-            <stop offset="100%" stopColor="#020617" />
-          </linearGradient>
-          <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
-            <path d="M26 0H0V26" fill="none" stroke="rgba(148,163,184,.08)" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect x="0" y="0" width="1400" height="740" rx="28" fill="url(#houseFloor)" />
-        <rect x="0" y="0" width="1400" height="740" fill="url(#grid)" opacity=".8" />
-        {ROOMS.map((room) => {
-          const count = agents.filter((a) => a.room === room.id).length;
-          return (
-            <g key={room.id}>
-              <rect x={room.x} y={room.y} width={room.w} height={room.h} rx="28" fill={ROOM_FILL[room.id]} stroke="rgba(226,232,240,.18)" strokeWidth="2" />
-              <rect x={room.x + 10} y={room.y + 10} width={room.w - 20} height={room.h - 20} rx="22" fill="rgba(255,255,255,.035)" />
-              <text x={room.x + 24} y={room.y + 36} fill="#e2e8f0" fontSize="18" fontWeight="800">{room.label}</text>
-              <text x={room.x + room.w - 34} y={room.y + 36} textAnchor="end" fill="#94a3b8" fontSize="13">{count}</text>
-            </g>
-          );
+    <div className="oh-office-frame" aria-label="OpenHouse pixel office">
+      <div className="oh-office-world">
+        <img className="oh-office-bg" src={asset('office_bg.webp')} alt="pixel office" draggable={false} />
+        <img className="oh-office-prop oh-server" src={asset('serverroom.gif')} alt="server room" draggable={false} />
+        <img className="oh-office-prop oh-coffee" src={asset('coffee-machine.gif')} alt="coffee machine" draggable={false} />
+        <img className="oh-office-prop oh-sofa" src={asset('sofa-idle.webp')} alt="sofa" draggable={false} />
+        {visible.map((agent, index) => {
+          const slot = OFFICE_SLOTS[index] ?? OFFICE_SLOTS[0];
+          return <button
+            key={agent.id}
+            type="button"
+            className={`oh-office-agent ${agent.id === selectedId ? 'selected' : ''} ${agent.status}`}
+            style={{ left: `${slot.x}%`, top: `${slot.y}%`, ['--agent-scale' as string]: slot.scale }}
+            onClick={() => onSelect(agent.id)}
+            title={`${agent.displayName} · ${agent.status}`}
+          >
+            <span className="oh-agent-label" style={{ transform: `translateX(${slot.labelDx}px)` }}>{shortName(agent.displayName)}</span>
+            <span className="oh-bubble">{bubbleFor(agent)}</span>
+            <img src={asset(spriteFor(agent, slot.sprite))} alt="" draggable={false} />
+            <span className="oh-status-dot" />
+          </button>;
         })}
-        {grouped ? <GroupedAgents agents={agents} onSelect={onSelect} selectedId={selectedId} /> : agents.map((agent) => {
-          const p = pos.get(agent.id);
-          if (!p) return null;
-          return (
-            <g key={agent.id} transform={`translate(${p.x} ${p.y})`} onClick={() => onSelect(agent.id)} role="button" tabIndex={0} className="oh-agent-hit">
-              <AgentBody body={agent.body} status={agent.status} selected={agent.id === selectedId} label={agent.displayName} />
-              <text y="68" textAnchor="middle" fill="#e5e7eb" fontSize="12" fontWeight="700">{truncate(agent.displayName, 16)}</text>
-            </g>
-          );
-        })}
-      </svg>
+        {overflow > 0 && <div className="oh-overflow-badge">+{overflow} more agents in the office</div>}
+        <div className="oh-office-name"><span>★</span> OpenHouse Agent Office <span>★</span></div>
+      </div>
     </div>
   );
 }
 
-function GroupedAgents({ agents, selectedId, onSelect }: { agents: OpenHouseAgent[]; selectedId?: string; onSelect(id: string): void }) {
-  return <>
-    {ROOMS.map((room) => {
-      const roomAgents = agents.filter((a) => a.room === room.id);
-      if (!roomAgents.length) return null;
-      const errorCount = roomAgents.filter((a) => a.status === 'error' || a.status === 'offline').length;
-      const onlineCount = roomAgents.filter((a) => a.status === 'online' || a.status === 'busy').length;
-      return (
-        <g key={room.id} transform={`translate(${room.x + room.w / 2} ${room.y + room.h / 2 + 8})`} onClick={() => onSelect(roomAgents[0].id)} className="oh-agent-hit">
-          <circle r="48" fill="rgba(15,23,42,.82)" stroke={errorCount ? '#f87171' : '#67e8f9'} strokeWidth="3" />
-          <text textAnchor="middle" y="-8" fill="#f8fafc" fontSize="28" fontWeight="900">{roomAgents.length}</text>
-          <text textAnchor="middle" y="18" fill="#cbd5e1" fontSize="12">agents</text>
-          <text textAnchor="middle" y="38" fill={errorCount ? '#fecaca' : '#bbf7d0'} fontSize="11">{onlineCount} ok · {errorCount} issue</text>
-          {selectedId && roomAgents.some((a) => a.id === selectedId) && <circle r="58" fill="none" stroke="#f8fafc" strokeDasharray="8 8" />}
-        </g>
-      );
-    })}
-  </>;
+function spriteFor(agent: OpenHouseAgent, fallback: string): string {
+  if (agent.status === 'busy' || agent.mood === 'focused' || agent.mood === 'thinking') return 'star-working.gif';
+  if (agent.status === 'error' || agent.status === 'offline' || agent.mood === 'sick') return 'guestagent2.webp';
+  if (agent.sourceKind === 'tytus-daemon') return fallback;
+  if (agent.sourceKind === 'mcp-http') return 'guest_anim_3.webp';
+  if (agent.sourceKind === 'openai-compatible') return 'guest_anim_1.webp';
+  return fallback;
 }
 
-function truncate(s: string, max: number): string {
-  return s.length <= max ? s : `${s.slice(0, max - 1)}…`;
+function bubbleFor(agent: OpenHouseAgent): string {
+  if (agent.status === 'online') return 'ready';
+  if (agent.status === 'busy') return 'working';
+  if (agent.status === 'offline') return 'offline';
+  if (agent.status === 'error') return 'bug';
+  if (agent.status === 'degraded') return 'check me';
+  return 'waiting';
+}
+
+function shortName(name: string): string {
+  return name.length <= 14 ? name : `${name.slice(0, 13)}…`;
 }
