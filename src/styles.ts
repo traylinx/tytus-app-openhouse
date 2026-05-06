@@ -1,7 +1,7 @@
 export const styles = `
 @font-face {
   font-family: ArkPixel;
-  src: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.2/assets/star-office/fonts/ark-pixel-12px-proportional-latin.ttf.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/fonts/ark-pixel-12px-proportional-latin.ttf.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -298,7 +298,7 @@ export const styles = `
   text-shadow: 2px 2px 0 #1a1020;
 }
 .oh-memo {
-  background-image: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.2/assets/star-office/memo-bg.webp');
+  background-image: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/memo-bg.webp');
   background-size: cover;
   color: #5c4326;
   align-items: center;

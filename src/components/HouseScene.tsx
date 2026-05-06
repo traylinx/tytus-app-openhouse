@@ -7,7 +7,7 @@ interface Props {
   onSelect(id: string): void;
 }
 
-const ASSET_BASE = 'https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.2/assets/star-office/';
+const ASSET_BASE = 'https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/';
 const asset = (name: string) => `${ASSET_BASE}${name}`;
 
 type Slot = { x: number; y: number; scale: number; sprite: string; labelDx?: number; room: string };

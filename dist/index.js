@@ -516,7 +516,7 @@ function Xe(e) {
     return {};
   }
 }
-const Qe = "https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.2/assets/star-office/", H = (e) => `${Qe}${e}`, O = [
+const Qe = "https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/", H = (e) => `${Qe}${e}`, O = [
   { x: 22, y: 61, scale: 1.35, sprite: "guestagent1.webp", room: "carpet desk" },
   { x: 68, y: 30, scale: 1.18, sprite: "guestagent2.webp", labelDx: -2, room: "server room" },
   { x: 50, y: 63, scale: 1.12, sprite: "guest_anim_2.webp", room: "coffee table" },
@@ -667,7 +667,7 @@ function lt(e) {
 const dt = `
 @font-face {
   font-family: ArkPixel;
-  src: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.2/assets/star-office/fonts/ark-pixel-12px-proportional-latin.ttf.woff2') format('woff2');
+  src: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/fonts/ark-pixel-12px-proportional-latin.ttf.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -964,7 +964,7 @@ const dt = `
   text-shadow: 2px 2px 0 #1a1020;
 }
 .oh-memo {
-  background-image: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.2/assets/star-office/memo-bg.webp');
+  background-image: url('https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/assets/star-office/memo-bg.webp');
   background-size: cover;
   color: #5c4326;
   align-items: center;
