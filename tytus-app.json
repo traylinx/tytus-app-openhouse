@@ -48,6 +48,6 @@
     ]
   },
   "entry": {
-    "url": "https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@main/dist/index.js"
+    "url": "https://cdn.jsdelivr.net/gh/traylinx/tytus-app-openhouse@v1.1.0/dist/index.js"
   }
 }
